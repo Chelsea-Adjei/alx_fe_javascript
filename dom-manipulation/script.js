@@ -4,6 +4,19 @@ let quotes = [
     {text: "I am music, music is me.", category:"Music"},
 ];  // create a lists of quotes first using array
 
+// Load quotes from local storage on initialization
+function loadQuotes() {
+    const storedQuotes = localStorage.getItem('quotes');
+    if (storedQuotes) {
+        quotes = JSON.parse(storedQuotes);
+    }
+}
+
+// Save quotes to local storage
+function saveQuotes() {
+    localStorage.setItem('quotes', JSON.stringify(quotes));
+}
+
 function showRandomQuote(){ // function to display a random quote using innerHTML
     if (quotes.length === 0) {
         document.getElementById('quoteDisplay').innerHTML = "No quotes available.";
@@ -53,6 +66,19 @@ function createAddQuoteForm(){  // Function to create the Add Quote form dynamic
     addQuote(); // Call the addQuote function
     });
 }
+
+function exportQuotes() {
+    const dataStr = JSON.stringify(quotes, null, 2); // Pretty JSON format
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'quotes.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Clean up the DOM
+  }
 
 function addQuote(){  // this is the function to add a new quote
     const newQuoteText = document.getElementById('newQuoteText').value.trim(); //getting the values from input field in HTML
