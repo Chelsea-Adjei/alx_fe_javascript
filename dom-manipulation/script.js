@@ -78,7 +78,20 @@ function exportQuotes() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link); // Clean up the DOM
-  }
+}
+
+// Function to import quotes from JSON file
+function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    fileReader.onload = function(event) {
+      const importedQuotes = JSON.parse(event.target.result);
+      quotes.push(...importedQuotes);
+      saveQuotes(); // Save to local storage after importing
+      displayQuotes();
+      alert('Quotes imported successfully!');
+    };
+    fileReader.readAsText(event.target.files[0]);
+}
 
 function addQuote(){  // this is the function to add a new quote
     const newQuoteText = document.getElementById('newQuoteText').value.trim(); //getting the values from input field in HTML
