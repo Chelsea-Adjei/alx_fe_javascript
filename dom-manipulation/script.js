@@ -4,7 +4,7 @@ let quotes = [
     {text: "I am music, music is me.", category:"Music"},
 ];  // create a lists of quotes first using array
 
-function showRandomQuote(){
+function showRandomQuote(){ // function to display a random quote using innerHTML
     if (quotes.length === 0) {
         document.getElementById('quoteDisplay').innerHTML = "No quotes available.";
         return;
@@ -15,6 +15,43 @@ function showRandomQuote(){
 
     document.getElementById('quoteText').textContent = `"${randomQuote.text}"`; // using the DOM to display the random quote
     document.getElementById('quoteCategory').textContent = `-${randomQuote.category}`; // to display the random category
+}
+
+function createAddQuoteForm(){  // Function to create the Add Quote form dynamically
+    const formContainer = document.getElementById('formContainer');
+
+    const form = document.getElementById('form'); // This is creating a form element.
+    form.id = 'addQuoteForm';
+
+    const quoteInput = document.createElement('input'); // creating the input "text" form.
+    quoteInput.type = 'text'; //the input will be texts.
+    quoteInput.id = 'newQuoteText'; // where the quote will be inputted.
+    quoteInput.placeholder = 'Enter a new quote';
+    quoteInput.required = true;
+
+    const categoryInput = document.createElement('input'); // creating the input "category"
+    categoryInput.type = 'text';
+    categoryInput.id = 'newQuoteCategory';
+    categoryInput.placeholder = 'Enter quote category'
+    categoryInput.required = true;
+
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Add quote';
+
+    //Now append the inputs and button to the form
+    form.appendChild(quoteInput);
+    form.appendChild(categoryInput);
+    form.appendChild(submitButton);
+
+    //Then Append the form to the container.
+    formContainer.appendChild(form);
+
+    //Now add an event listener to the form when submitted ot clicked on the submit button.
+    form.addEventListener('submit', function(event){
+    event.preventDefault(); // Prevent page reload on form submission
+    addQuote(); // Call the addQuote function
+    });
 }
 
 function addQuote(){  // this is the function to add a new quote
