@@ -48,6 +48,11 @@ function createAddQuoteForm(){  // Function to create the Add Quote form dynamic
     categoryInput.placeholder = 'Enter quote category'
     categoryInput.required = true;
 
+    const exportButton = document.createElement('button');
+    exportButton.textContent = 'Export Quotes as JSON';
+    exportButton.addEventListener('click', exportToJson);
+
+
     const submitButton = document.createElement('button');
     submitButton.type = 'submit';
     submitButton.textContent = 'Add quote';
@@ -55,6 +60,7 @@ function createAddQuoteForm(){  // Function to create the Add Quote form dynamic
     //Now append the inputs and button to the form
     form.appendChild(quoteInput);
     form.appendChild(categoryInput);
+    form.appendChild(exportButton);
     form.appendChild(submitButton);
 
     //Then Append the form to the container.
