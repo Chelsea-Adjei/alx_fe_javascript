@@ -5,6 +5,11 @@ let quotes = [
 ];  // create a lists of quotes first using array
 
 function showRandomQuote(){
+    if (quotes.length === 0) {
+        document.getElementById('quoteDisplay').innerHTML = "No quotes available.";
+        return;
+    }
+
     const randomIndex = Math.floor(Math.random() * quotes.length); //the random index used to select a quote is a whole number (an integer).Math.floor() rounds down the decimal result to the nearest whole number, ensuring that the random index is valid and within the bounds of the array.
     const randomQuote = quotes[randomIndex];
 
