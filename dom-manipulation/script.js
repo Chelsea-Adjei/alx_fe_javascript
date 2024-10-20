@@ -42,6 +42,22 @@ async function fetchQuotesFromServer() {
     }
 }
 
+function startDataSync() {
+    setInterval(async () => {
+        const serverQuotes = await fetchQuotesFromServer();
+        if (JSON.stringify(quotes) !== JSON.stringify(serverQuotes)) {
+            localStorage.setItem('quotes', JSON.stringify(serverQuotes));
+            quotes = serverQuotes;
+            displayQuotes();
+            notifyUser('Data synced with server.');
+        }
+    }, 10000); // Sync every 10 seconds
+}
+
+// Set interval to fetch quotes every 30 seconds (30000 ms)
+setInterval(fetchQuotesFromServer, 30000);
+
+
 // Sync local quotes with server quotes
 async function syncQuotes() {
     const serverQuotes = await fetchQuotesFromServer();
