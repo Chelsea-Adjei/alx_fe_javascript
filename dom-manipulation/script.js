@@ -87,6 +87,28 @@ function displayQuotes() {
     quoteDisplay.innerHTML = quotes.map(quote => `<p>"${quote.text}" - ${quote.category}</p>`).join('');
 }
 
+// Function to post a new quote to the server
+async function postQuoteToServer(quote) {
+    try {
+        const response = await fetch(serverUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(quote)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to post the quote to the server.');
+        }
+
+        const newQuote = await response.json();
+        console.log('Quote successfully posted to the server:', newQuote);
+    } catch (error) {
+        console.error('Error posting quote:', error);
+    }
+}
+
 function createAddQuoteForm(){  // Function to create the Add Quote form dynamically
     const formContainer = document.getElementById('formContainer');
 
@@ -140,8 +162,6 @@ function addQuote(){  // this is the function to add a new quote
         saveQuotes();
         displayQuotes();
         populateCategories();
-
-
 
         document.getElementById('newQuoteText').value = '';  //clear input files
         document.getElementById('newQuoteCategory').value = '';
