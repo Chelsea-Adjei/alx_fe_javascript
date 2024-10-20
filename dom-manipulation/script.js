@@ -9,7 +9,7 @@ window.onload = function() {
     const savedQuotes = localStorage.getItem('quotes');
     if (savedQuotes) {
       quotes = JSON.parse(savedQuotes);
-      displayQuotes();
+      //displayQuotes();
       populateCategories();
     }
 };
