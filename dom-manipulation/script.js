@@ -14,6 +14,9 @@ window.onload = function() {
     }
 };
 
+// Mock API URL for simulation
+const apiUrl = 'https://jsonplaceholder.typicode.com/posts'; // Replace with your own server or mock API if needed
+
 // Load quotes from local storage on initialization
 function loadQuotes() {
     const storedQuotes = localStorage.getItem('quotes');
@@ -21,6 +24,49 @@ function loadQuotes() {
         quotes = JSON.parse(storedQuotes);
     }
 }
+
+// Fetch quotes from the simulated server
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        // Simulate quote structure
+        const serverQuotes = data.map(item => ({
+            text: item.title,
+            category: "General" // Assign a default category for simulation
+        }));
+        return serverQuotes;
+    } catch (error) {
+        console.error("Error fetching data from server:", error);
+        return [];
+    }
+}
+
+// Sync local quotes with server quotes
+async function syncQuotes() {
+    const serverQuotes = await fetchQuotesFromServer();
+    if (serverQuotes.length > 0) {
+        const mergedQuotes = mergeQuotes(quotes, serverQuotes);
+        quotes = mergedQuotes;
+        saveQuotes();
+        alert('Quotes synced with server!'); // Added alert for sync success
+        filterQuotes(); // Update displayed quotes
+    }
+}
+
+// Merge local quotes with server quotes
+function mergeQuotes(localQuotes, serverQuotes) {
+    const quoteMap = new Map();
+
+    // Add local quotes to map
+    localQuotes.forEach(quote => quoteMap.set(quote.text, quote));
+
+    // Add server quotes to map, replacing any existing ones
+    serverQuotes.forEach(quote => quoteMap.set(quote.text, quote));
+
+    return Array.from(quoteMap.values());
+}
+
 
 function showRandomQuote(){ // function to display a random quote using innerHTML
     if (quotes.length === 0) {
@@ -95,6 +141,8 @@ function addQuote(){  // this is the function to add a new quote
         displayQuotes();
         populateCategories();
 
+
+
         document.getElementById('newQuoteText').value = '';  //clear input files
         document.getElementById('newQuoteCategory').value = '';
 
@@ -125,6 +173,12 @@ function populateCategories() {
       option.textContent = category;
       categoryFilter.appendChild(option);
     });
+
+    // Load last selected category from local storage
+    const lastSelectedCategory = localStorage.getItem('lastSelectedCategory');
+    if (lastSelectedCategory) {
+    categoryFilter.value = lastSelectedCategory;
+    }
 }
 
 // Filter quotes based on selected category
@@ -170,19 +224,6 @@ function importFromJsonFile(event) {
       alert('Quotes imported successfully!');
     };
     fileReader.readAsText(event.target.files[0]);
-}
-
-// Function to display quotes on the page
-function displayQuotes() {
-    const quoteDisplay = document.getElementById('quoteDisplay');
-    quoteDisplay.innerHTML = ''; // Clear previous content
-
-    // Loop through the quotes array and display each quote
-    quotes.forEach(quote => {
-      const quoteElement = document.createElement('p');
-      quoteElement.textContent = `"${quote.text}" - ${quote.category}`;
-      quoteDisplay.appendChild(quoteElement);
-    });
 }
 
 document.addEventListener('DOMContentLoaded', function(){
